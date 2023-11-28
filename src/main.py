@@ -1,18 +1,20 @@
 import numpy as np
 import gradio as gr
+from PIL import Image
+from lib.utils import *
 
 
-def sepia(input_img):
-    sepia_filter = np.array([
-        [0.393, 0.769, 0.189],
-        [0.349, 0.686, 0.168],
-        [0.272, 0.534, 0.131]
-    ])
-    sepia_img = input_img.dot(sepia_filter.T)
-    sepia_img /= sepia_img.max()
-    return sepia_img
+def crop_image(image):
+    img = image["composite"]
+    roi = get_roi(img)
+    return threshold(roi, 185)
 
 
 if __name__ == "__main__":
-    demo = gr.Interface(sepia, gr.Image(), "image")
+    demo = gr.Interface(
+        fn=crop_image,
+        inputs=gr.ImageEditor(interactive=True, sources=["upload"], type="numpy", image_mode="RGB"),
+        outputs=gr.Image(),
+        allow_flagging="never"
+    )
     demo.launch(show_api=True)

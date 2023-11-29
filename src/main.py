@@ -7,7 +7,7 @@ from lib.utils import *
 def crop_image(image):
     img = image["composite"]
     roi = get_roi(img)
-    return threshold(roi, 185)
+    return roi
 
 
 if __name__ == "__main__":

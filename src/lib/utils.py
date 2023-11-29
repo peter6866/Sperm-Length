@@ -26,8 +26,8 @@ def get_roi(image):
 
     res = cv2.bitwise_and(image, image, mask=mask_of_largest)
 
-    return np.array(Image.fromarray(res).convert("L"))
+    return res
 
 
 def threshold(image, val):
-    return np.where(image > val, 255, 0)
+    return np.where(image > val, 1, 0)

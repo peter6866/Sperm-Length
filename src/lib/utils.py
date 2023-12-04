@@ -1,9 +1,21 @@
 import numpy as np
-from PIL import Image
 import cv2
 
 
 def get_roi(image):
+    """
+        Extracts region of interest (ROI) from an image.
+
+        This function identifies red areas within a specified color range, finds the largest red contour,
+        and returns an image with only this contour visible against a black background.
+
+        Parameters:
+        image (numpy.ndarray): Input image in BGR format.
+
+        Returns:
+        numpy.ndarray: Image with the largest red area isolated.
+        """
+
     # Range of red color
     lower_red = np.array([100, 0, 0])
     upper_red = np.array([255, 100, 100])
@@ -25,6 +37,10 @@ def get_roi(image):
     )
 
     res = cv2.bitwise_and(image, image, mask=mask_of_largest)
+
+    # Also set the color of contour to black
+    mask = ((image >= lower_red) & (image <= upper_red)).all(axis=-1)
+    res[mask] = [0, 0, 0]
 
     return res
 
